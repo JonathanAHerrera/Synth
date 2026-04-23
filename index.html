@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>CS-80 — Blade Runner Blues</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0D0D1A;color:#F0EEF8;font-family:'Courier New',monospace;overflow:hidden;-webkit-tap-highlight-color:transparent}
+
+/* ── OVERLAY ── */
+#overlay{
+  position:fixed;inset:0;z-index:999;
+  background:#0D0D1A;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  cursor:pointer;
+}
+.ov-title{color:#E8B86D;font-size:clamp(1rem,3.5vw,1.8rem);letter-spacing:.2em;text-transform:uppercase;text-align:center}
+.ov-sub{color:#7B5EA7;font-size:clamp(.7rem,2vw,1rem);letter-spacing:.12em;text-align:center}
+.ov-cta{color:#3DD6F5;font-size:clamp(.85rem,2.5vw,1.1rem);letter-spacing:.15em;animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ── PANEL ── */
+#panel{
+  display:flex;flex-direction:column;height:100vh;
+  background:radial-gradient(ellipse at 50% 40%,#15152B 0%,#0D0D1A 75%);
+}
+
+/* ── HEADER ── */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px 8px;
+  border-bottom:1px solid #3DD6F518;
+  flex-shrink:0;
+}
+.brand-title{color:#E8B86D;font-size:clamp(.65rem,1.8vw,.9rem);letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+.brand-sub{color:#7B5EA760;font-size:clamp(.55rem,1.2vw,.7rem);letter-spacing:.1em;margin-top:3px}
+.power-led{width:10px;height:10px;border-radius:50%;background:#3DD6F5;box-shadow:0 0 6px #3DD6F5,0 0 14px #3DD6F580;flex-shrink:0}
+
+/* ── CONTROLS ── */
+#controls{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(14px,4vw,52px);
+  padding:clamp(10px,1.8vh,22px) 20px clamp(8px,1.5vh,18px);
+  border-bottom:1px solid #3DD6F510;
+  flex-shrink:0;
+}
+.ctrl-group{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ctrl-label{
+  color:#7B5EA7;font-size:clamp(.52rem,1.1vw,.67rem);
+  letter-spacing:.1em;text-transform:uppercase;text-align:center;
+}
+.ctrl-track{
+  position:relative;
+  width:34px;height:clamp(80px,13vh,125px);
+  background:#0F0F22;
+  border:1px solid #3DD6F528;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 1px 4px #0005;
+}
+.ctrl-track::before{
+  content:'';position:absolute;left:50%;top:8px;bottom:8px;
+  width:2px;margin-left:-1px;
+  background:linear-gradient(to bottom,#3DD6F515,#7B5EA740,#3DD6F515);
+  border-radius:1px;
+}
+/* Tick marks */
+.ctrl-track::after{
+  content:'';position:absolute;left:4px;right:4px;top:50%;
+  height:1px;background:#7B5EA720;
+}
+
+.ctrl-slider{
+  -webkit-appearance:slider-vertical;
+  writing-mode:vertical-lr;
+  direction:rtl;
+  width:28px;
+  height:calc(100% - 10px);
+  background:transparent;
+  cursor:pointer;
+  position:relative;z-index:1;
+}
+.ctrl-slider:focus{outline:none}
+/* WebKit thumb */
+.ctrl-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:24px;height:9px;
+  background:linear-gradient(to right,#2AC4E0,#3DD6F5,#2AC4E0);
+  border-radius:3px;
+  border:1px solid #3DD6F5CC;
+  box-shadow:0 0 7px #3DD6F5BB,0 0 14px #3DD6F540;
+  cursor:grab;
+}
+.ctrl-slider::-webkit-slider-thumb:active{cursor:grabbing}
+.ctrl-slider::-webkit-slider-runnable-track{width:3px;background:transparent}
+/* Firefox */
+.ctrl-slider::-moz-range-thumb{
+  width:24px;height:9px;
+  background:linear-gradient(to right,#2AC4E0,#3DD6F5,#2AC4E0);
+  border-radius:3px;border:1px solid #3DD6F5CC;
+  box-shadow:0 0 7px #3DD6F5BB;cursor:grab;
+}
+.ctrl-slider::-moz-range-track{width:3px;background:transparent}
+
+.ctrl-value{
+  color:#3DD6F5;font-size:clamp(.58rem,1.1vw,.7rem);
+  letter-spacing:.04em;min-width:56px;text-align:center;
+}
+
+/* ── KEYBOARD WRAP ── */
+#keyboard-wrap{
+  flex:1;display:flex;align-items:flex-end;justify-content:center;
+  padding:clamp(10px,2vh,22px) 16px clamp(14px,2.5vh,28px);
+  min-height:0;
+}
+
+/* ── KEYBOARD ── */
+#keyboard{
+  position:relative;
+  display:flex;align-items:flex-end;
+  touch-action:none;
+  user-select:none;-webkit-user-select:none;
+}
+
+/* White keys */
+.key-w{
+  position:relative;
+  width:clamp(36px,6.5vw,62px);
+  height:clamp(128px,23vh,196px);
+  background:linear-gradient(to bottom,#ECEAF6 0%,#F5F3FF 25%,#D8D5E8 100%);
+  border:1px solid #5A4A8A;
+  border-radius:0 0 6px 6px;
+  cursor:pointer;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:9px;
+  box-shadow:2px 4px 8px #0008,inset 0 -2px 4px #0002,inset 0 1px 0 #fff5;
+  transition:background .06s,box-shadow .06s;
+  flex-shrink:0;
+}
+.key-w+.key-w{border-left:none}
+.key-w.active{
+  background:linear-gradient(to bottom,#3DD6F530 0%,#3DD6F5AA 100%);
+  box-shadow:0 0 14px #3DD6F5CC,0 0 28px #3DD6F540,2px 4px 8px #0008,inset 0 -2px 4px #3DD6F530;
+}
+
+/* Black keys */
+.key-b{
+  position:absolute;
+  width:clamp(24px,4vw,38px);
+  height:clamp(78px,14vh,118px);
+  background:linear-gradient(165deg,#1C1C30 0%,#0D0D1A 60%,#151525 100%);
+  border:1px solid #3DD6F520;
+  border-top:2px solid #3DD6F530;
+  border-radius:0 0 4px 4px;
+  cursor:pointer;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:7px;
+  z-index:2;
+  box-shadow:2px 5px 12px #000D,inset 0 -1px 3px #0007,inset 0 1px 0 #ffffff10;
+  transition:background .06s,box-shadow .06s;
+}
+.key-b.active{
+  background:linear-gradient(165deg,#3DD6F540 0%,#3DD6F5AA 100%);
+  box-shadow:0 0 10px #3DD6F5CC,0 0 20px #3DD6F550,2px 5px 12px #000D;
+}
+
+/* Key labels */
+.key-lbl{
+  font-size:clamp(7px,1.1vw,10px);
+  opacity:.65;
+  pointer-events:none;
+  letter-spacing:0;
+}
+.key-w .key-lbl{color:#7B5EA7}
+.key-b .key-lbl{color:#3DD6F5}
+
+/* ── FOOTER HINT ── */
+#hint{
+  position:fixed;bottom:6px;left:0;right:0;
+  text-align:center;font-size:.6rem;color:#7B5EA740;
+  pointer-events:none;letter-spacing:.08em;
+}
+</style>
+</head>
+<body>
+
+<div id="overlay">
+  <div>
+    <div class="ov-title">Yamaha CS-80</div>
+    <div class="ov-sub">Blade Runner &mdash; Vangelis &middot; 1982</div>
+  </div>
+  <div class="ov-cta">&#9654;&nbsp; TAP TO START</div>
+</div>
+
+<div id="panel">
+  <header>
+    <div>
+      <div class="brand-title">Yamaha CS-80 &mdash; Blade Runner (1982)</div>
+      <div class="brand-sub">Polyphonic Synthesizer &middot; Vangelis</div>
+    </div>
+    <div class="power-led"></div>
+  </header>
+
+  <div id="controls">
+    <div class="ctrl-group">
+      <div class="ctrl-label">Reverb</div>
+      <div class="ctrl-track">
+        <input class="ctrl-slider" type="range" id="s-reverb" min="0" max="100" value="72" orient="vertical">
+      </div>
+      <div class="ctrl-value" id="v-reverb">72%</div>
+    </div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Filter Bloom</div>
+      <div class="ctrl-track">
+        <input class="ctrl-slider" type="range" id="s-bloom" min="0" max="100" value="65" orient="vertical">
+      </div>
+      <div class="ctrl-value" id="v-bloom">2670 Hz</div>
+    </div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Detune</div>
+      <div class="ctrl-track">
+        <input class="ctrl-slider" type="range" id="s-detune" min="0" max="100" value="40" orient="vertical">
+      </div>
+      <div class="ctrl-value" id="v-detune">12&cent;</div>
+    </div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Attack</div>
+      <div class="ctrl-track">
+        <input class="ctrl-slider" type="range" id="s-attack" min="0" max="100" value="38" orient="vertical">
+      </div>
+      <div class="ctrl-value" id="v-attack">400 ms</div>
+    </div>
+  </div>
+
+  <div id="keyboard-wrap">
+    <div id="keyboard"></div>
+  </div>
+</div>
+
+<div id="hint">A&thinsp;S&thinsp;D&thinsp;F&thinsp;G&thinsp;H&thinsp;J&thinsp;K &nbsp;&middot;&nbsp; W&thinsp;E&thinsp;T&thinsp;Y&thinsp;U &nbsp;&middot;&nbsp; iPhone: ringer must be ON</div>
+
+<script>
+'use strict';
+
+// ─────────────────────────────────────────────────────────────────
+//  NOTE DEFINITIONS  (C3 = midi 48)
+// ─────────────────────────────────────────────────────────────────
+const NOTES = [
+  {midi:48, type:'w', kb:'a', wIdx:0},
+  {midi:49, type:'b', kb:'w', wIdx:0},
+  {midi:50, type:'w', kb:'s', wIdx:1},
+  {midi:51, type:'b', kb:'e', wIdx:1},
+  {midi:52, type:'w', kb:'d', wIdx:2},
+  {midi:53, type:'w', kb:'f', wIdx:3},
+  {midi:54, type:'b', kb:'t', wIdx:3},
+  {midi:55, type:'w', kb:'g', wIdx:4},
+  {midi:56, type:'b', kb:'y', wIdx:4},
+  {midi:57, type:'w', kb:'h', wIdx:5},
+  {midi:58, type:'b', kb:'u', wIdx:5},
+  {midi:59, type:'w', kb:'j', wIdx:6},
+  {midi:60, type:'w', kb:'k', wIdx:7},
+];
+const KB = {};
+NOTES.forEach(n => { KB[n.kb] = n.midi; });
+
+// ─────────────────────────────────────────────────────────────────
+//  SLIDER MAPPINGS
+// ─────────────────────────────────────────────────────────────────
+const toReverb = v => (v / 100) * 0.62;         // 0 – 0.62 wet
+const toBloom  = v => 200 + (v / 100) * 3800;   // 200 – 4000 Hz
+const toDetune = v => (v / 100) * 28;            // 0 – 28 cents
+const toAttack = v => 0.05 + (v / 100) * 1.95;  // 50 ms – 2 s
+
+const P = {
+  reverb: toReverb(72),
+  bloom:  toBloom(65),
+  detune: toDetune(40),
+  attack: toAttack(38),
+};
+
+// ─────────────────────────────────────────────────────────────────
+//  AUDIO GRAPH  (initialized on first gesture)
+// ─────────────────────────────────────────────────────────────────
+let ctx, busIn, dryGain, wetGain, reverb, compressor, masterGain, lfo, lfoGain;
+
+function buildIR(ctx) {
+  const sr  = ctx.sampleRate;
+  const dur = window.matchMedia('(pointer:coarse)').matches ? 1.8 : 2.5;
+  const len = Math.ceil(sr * dur);
+  const ir  = ctx.createBuffer(2, len, sr);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = ir.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      const t     = i / len;
+      const early = i < sr * 0.045 ? 1.5 : 1.0; // slight early-reflection boost
+      d[i] = (Math.random() * 2 - 1) * early * Math.pow(1 - t, 2.6);
+    }
+  }
+  const conv = ctx.createConvolver();
+  conv.buffer = ir;
+  return conv;
+}
+
+function initAudio() {
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Compressor → destination (handles polyphony clipping)
+  compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -14;
+  compressor.knee.value      = 10;
+  compressor.ratio.value     = 8;
+  compressor.attack.value    = 0.003;
+  compressor.release.value   = 0.2;
+  compressor.connect(ctx.destination);
+
+  masterGain = ctx.createGain();
+  masterGain.gain.value = 0.82;
+  masterGain.connect(compressor);
+
+  dryGain = ctx.createGain();
+  dryGain.gain.value = 1 - P.reverb * 0.45;
+  dryGain.connect(masterGain);
+
+  wetGain = ctx.createGain();
+  wetGain.gain.value = P.reverb;
+
+  reverb = buildIR(ctx);
+  wetGain.connect(reverb);
+  reverb.connect(masterGain);
+
+  busIn = ctx.createGain();
+  busIn.gain.value = 1;
+  busIn.connect(dryGain);
+  busIn.connect(wetGain);
+
+  // Global LFO — vibrato shared across voices
+  lfo = ctx.createOscillator();
+  lfo.type = 'sine';
+  lfo.frequency.value = 5;
+  lfoGain = ctx.createGain();
+  lfoGain.gain.value = 7; // ±7 cents vibrato depth
+  lfo.connect(lfoGain);
+  lfo.start();
+}
+
+async function ensureAudio() {
+  if (!ctx) initAudio();
+  if (ctx.state === 'suspended') await ctx.resume();
+}
+
+// ─────────────────────────────────────────────────────────────────
+//  VOICE
+// ─────────────────────────────────────────────────────────────────
+function midiToHz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+class Voice {
+  constructor(midi) {
+    this.midi = midi;
+    this.startTime = ctx.currentTime;
+    this.released = false;
+
+    const hz      = midiToHz(midi);
+    const t       = ctx.currentTime;
+    const atk     = P.attack;
+    const dec     = 0.55;
+    const sus     = 0.76;
+    const rel     = 0.82;
+    const bloom   = P.bloom;
+    const det     = P.detune;
+    const baseCut = 260;
+
+    // Oscillators
+    this.o1 = ctx.createOscillator();
+    this.o1.type = 'sawtooth';
+    this.o1.frequency.value = hz;
+    this.o1.detune.value = det;
+
+    this.o2 = ctx.createOscillator();
+    this.o2.type = 'sawtooth';
+    this.o2.frequency.value = hz;
+    this.o2.detune.value = -det;
+
+    // LFO → both oscillator detune (vibrato on top of static detuning)
+    lfoGain.connect(this.o1.detune);
+    lfoGain.connect(this.o2.detune);
+    this._lfoHooked = true;
+
+    // Mix
+    this.mix = ctx.createGain();
+    this.mix.gain.value = 0.44;
+
+    // Low-pass filter (12 dB/oct biquad)
+    this.flt = ctx.createBiquadFilter();
+    this.flt.type = 'lowpass';
+    this.flt.Q.value = 6.5;
+    this.flt.frequency.setValueAtTime(baseCut, t);
+    this.flt.frequency.linearRampToValueAtTime(baseCut + bloom, t + atk * 1.6);
+
+    // Amp
+    this.amp = ctx.createGain();
+    this.amp.gain.setValueAtTime(0.001, t);
+    this.amp.gain.linearRampToValueAtTime(1.0, t + atk);
+    this.amp.gain.linearRampToValueAtTime(sus, t + atk + dec);
+
+    // Connect graph
+    this.o1.connect(this.mix);
+    this.o2.connect(this.mix);
+    this.mix.connect(this.flt);
+    this.flt.connect(this.amp);
+    this.amp.connect(busIn);
+
+    this.o1.start(t);
+    this.o2.start(t);
+
+    this._rel     = rel;
+    this._baseCut = baseCut;
+  }
+
+  release() {
+    if (this.released) return;
+    this.released = true;
+    this._doRelease(this._rel);
+    setTimeout(() => this.destroy(), (this._rel + 0.12) * 1000);
+  }
+
+  fastRelease() {
+    this.released = true;
+    this._doRelease(0.06);
+    setTimeout(() => this.destroy(), 200);
+  }
+
+  _doRelease(relTime) {
+    const tR = ctx.currentTime;
+    const curAmp = this.amp.gain.value;
+    const curFlt = this.flt.frequency.value;
+
+    this.amp.gain.cancelScheduledValues(tR);
+    this.amp.gain.setValueAtTime(curAmp, tR);
+    this.amp.gain.linearRampToValueAtTime(0.0001, tR + relTime);
+
+    this.flt.frequency.cancelScheduledValues(tR);
+    this.flt.frequency.setValueAtTime(curFlt, tR);
+    this.flt.frequency.linearRampToValueAtTime(this._baseCut, tR + relTime * 0.9);
+  }
+
+  destroy() {
+    try {
+      if (this._lfoHooked) {
+        lfoGain.disconnect(this.o1.detune);
+        lfoGain.disconnect(this.o2.detune);
+        this._lfoHooked = false;
+      }
+      this.o1.stop(); this.o2.stop();
+      [this.o1, this.o2, this.mix, this.flt, this.amp].forEach(n => { try { n.disconnect(); } catch(e){} });
+    } catch(e) {}
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+//  POLYPHONY
+// ─────────────────────────────────────────────────────────────────
+const isMobile  = window.matchMedia('(pointer:coarse)').matches;
+const MAX_VOICES = isMobile ? 6 : 8;
+const voices    = new Map(); // midi → Voice
+
+function noteOn(midi) {
+  if (!ctx) return;
+
+  // Steal same-note retrigger
+  if (voices.has(midi)) {
+    voices.get(midi).fastRelease();
+    voices.delete(midi);
+  }
+
+  // Steal oldest if at ceiling
+  if (voices.size >= MAX_VOICES) {
+    let oldestMidi = null, oldestT = Infinity;
+    voices.forEach((v, m) => { if (v.startTime < oldestT) { oldestT = v.startTime; oldestMidi = m; } });
+    if (oldestMidi !== null) { voices.get(oldestMidi).fastRelease(); voices.delete(oldestMidi); }
+  }
+
+  const v = new Voice(midi);
+  voices.set(midi, v);
+  markKey(midi, true);
+}
+
+function noteOff(midi) {
+  const v = voices.get(midi);
+  if (!v) return;
+  voices.delete(midi);
+  v.release();
+  markKey(midi, false);
+}
+
+// ─────────────────────────────────────────────────────────────────
+//  KEYBOARD UI
+// ─────────────────────────────────────────────────────────────────
+const kbEl  = document.getElementById('keyboard');
+const keyEl = new Map(); // midi → DOM element
+
+(function buildKeyboard() {
+  const whites = NOTES.filter(n => n.type === 'w');
+  const blacks = NOTES.filter(n => n.type === 'b');
+
+  whites.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'key-w';
+    el.dataset.midi = n.midi;
+    const lbl = document.createElement('span');
+    lbl.className = 'key-lbl';
+    lbl.textContent = n.kb.toUpperCase();
+    el.appendChild(lbl);
+    kbEl.appendChild(el);
+    keyEl.set(n.midi, el);
+  });
+
+  blacks.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'key-b';
+    el.dataset.midi = n.midi;
+    const lbl = document.createElement('span');
+    lbl.className = 'key-lbl';
+    lbl.textContent = n.kb.toUpperCase();
+    el.appendChild(lbl);
+    kbEl.appendChild(el);
+    keyEl.set(n.midi, el);
+  });
+
+  positionBlacks();
+  window.addEventListener('resize', positionBlacks);
+})();
+
+function positionBlacks() {
+  const blacks = NOTES.filter(n => n.type === 'b');
+  const whites = NOTES.filter(n => n.type === 'w');
+  if (!keyEl.has(whites[0].midi)) return;
+  const ww = keyEl.get(whites[0].midi).offsetWidth;
+  const bel = keyEl.get(blacks[0].midi);
+  if (!bel) return;
+  const bw = bel.offsetWidth;
+
+  blacks.forEach(n => {
+    const el = keyEl.get(n.midi);
+    // Center black key over the right edge of its white key neighbor
+    el.style.left = (n.wIdx * ww + ww * 0.66 - bw / 2) + 'px';
+    el.style.top  = '0';
+  });
+}
+
+function markKey(midi, on) {
+  const el = keyEl.get(midi);
+  if (el) el.classList.toggle('active', on);
+}
+
+// ─────────────────────────────────────────────────────────────────
+//  POINTER INPUT (handles mouse + touch uniformly)
+// ─────────────────────────────────────────────────────────────────
+const ptrVoices = new Map(); // pointerId → midi
+
+kbEl.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  const key = e.target.closest('[data-midi]');
+  if (!key) return;
+  const midi = +key.dataset.midi;
+  key.setPointerCapture(e.pointerId);
+  ptrVoices.set(e.pointerId, midi);
+  ensureAudio().then(() => noteOn(midi));
+}, {passive: false});
+
+kbEl.addEventListener('pointerup', e => {
+  const midi = ptrVoices.get(e.pointerId);
+  if (midi == null) return;
+  ptrVoices.delete(e.pointerId);
+  noteOff(midi);
+});
+
+kbEl.addEventListener('pointercancel', e => {
+  const midi = ptrVoices.get(e.pointerId);
+  if (midi != null) { ptrVoices.delete(e.pointerId); noteOff(midi); }
+});
+
+// ─────────────────────────────────────────────────────────────────
+//  KEYBOARD INPUT
+// ─────────────────────────────────────────────────────────────────
+const heldKB = new Set();
+
+document.addEventListener('keydown', e => {
+  if (e.repeat) return;
+  const midi = KB[e.key.toLowerCase()];
+  if (midi == null) return;
+  if (heldKB.has(midi)) return;
+  heldKB.add(midi);
+  ensureAudio().then(() => noteOn(midi));
+});
+
+document.addEventListener('keyup', e => {
+  const midi = KB[e.key.toLowerCase()];
+  if (midi == null) return;
+  heldKB.delete(midi);
+  noteOff(midi);
+});
+
+// ─────────────────────────────────────────────────────────────────
+//  SLIDERS
+// ─────────────────────────────────────────────────────────────────
+function bindSlider(id, valId, map, display, onChange) {
+  const sl = document.getElementById(id);
+  const vl = document.getElementById(valId);
+  const update = () => {
+    const raw = +sl.value;
+    const val = map(raw);
+    vl.innerHTML = display(val, raw);
+    onChange(val);
+  };
+  sl.addEventListener('input', update);
+  // Set initial display without triggering audio (ctx may not exist yet)
+  const raw = +sl.value;
+  vl.innerHTML = display(map(raw), raw);
+}
+
+bindSlider('s-reverb','v-reverb', toReverb,
+  (v,r) => `${r}%`,
+  v => {
+    P.reverb = v;
+    if (!wetGain) return;
+    const t = ctx.currentTime;
+    wetGain.gain.setTargetAtTime(v, t, 0.05);
+    dryGain.gain.setTargetAtTime(1 - v * 0.45, t, 0.05);
+  }
+);
+
+bindSlider('s-bloom','v-bloom', toBloom,
+  (v) => `${Math.round(v)} Hz`,
+  v => {
+    P.bloom = v;
+    if (!ctx) return;
+    voices.forEach(voice => {
+      voice.flt.frequency.cancelScheduledValues(ctx.currentTime);
+      voice.flt.frequency.setTargetAtTime(260 + v, ctx.currentTime, 0.08);
+    });
+  }
+);
+
+bindSlider('s-detune','v-detune', toDetune,
+  (v) => `${Math.round(v)}¢`,
+  v => {
+    P.detune = v;
+    voices.forEach(voice => {
+      voice.o1.detune.value = v;
+      voice.o2.detune.value = -v;
+    });
+  }
+);
+
+bindSlider('s-attack','v-attack', toAttack,
+  (v) => v < 1 ? `${Math.round(v*1000)} ms` : `${v.toFixed(2)} s`,
+  v => { P.attack = v; }
+);
+
+// ─────────────────────────────────────────────────────────────────
+//  OVERLAY
+// ─────────────────────────────────────────────────────────────────
+const overlay = document.getElementById('overlay');
+
+async function startFromOverlay(e) {
+  e.preventDefault();
+  await ensureAudio();
+  overlay.style.transition = 'opacity .4s';
+  overlay.style.opacity = '0';
+  setTimeout(() => { overlay.style.display = 'none'; }, 420);
+}
+
+overlay.addEventListener('click', startFromOverlay);
+overlay.addEventListener('touchend', startFromOverlay, {passive:false});
+
+// ─────────────────────────────────────────────────────────────────
+//  POSITION BLACK KEYS AFTER FIRST PAINT
+// ─────────────────────────────────────────────────────────────────
+requestAnimationFrame(() => {
+  requestAnimationFrame(positionBlacks);
+});
+</script>
+</body>
+</html>
