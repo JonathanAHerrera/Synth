@@ -4,9 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <title>CS-80 — Blade Runner Blues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0D0D1A;color:#F0EEF8;font-family:'Courier New',monospace;overflow:hidden;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0D0D1A;color:#F0EEF8;font-family:'Orbitron','Courier New',monospace;overflow:hidden;-webkit-tap-highlight-color:transparent}
 
 /* ── OVERLAY ── */
 #overlay{
@@ -15,9 +18,9 @@ html,body{height:100%;background:#0D0D1A;color:#F0EEF8;font-family:'Courier New'
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
   cursor:pointer;
 }
-.ov-title{color:#E8B86D;font-size:clamp(1rem,3.5vw,1.8rem);letter-spacing:.2em;text-transform:uppercase;text-align:center}
-.ov-sub{color:#7B5EA7;font-size:clamp(.7rem,2vw,1rem);letter-spacing:.12em;text-align:center}
-.ov-cta{color:#3DD6F5;font-size:clamp(.85rem,2.5vw,1.1rem);letter-spacing:.15em;animation:blink 1.8s ease-in-out infinite}
+.ov-title{color:#E8B86D;font-size:clamp(2rem,6vw,3.5rem);letter-spacing:.3em;text-transform:uppercase;text-align:center;font-weight:900;text-shadow:0 0 30px #E8B86D80}
+.ov-sub{color:#7B5EA7;font-size:clamp(1.1rem,3.2vw,1.9rem);letter-spacing:.18em;text-align:center}
+.ov-cta{color:#3DD6F5;font-size:clamp(1.4rem,4vw,2.2rem);letter-spacing:.2em;animation:blink 1.8s ease-in-out infinite;text-shadow:0 0 20px #3DD6F5}
 @keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
 
 /* ── PANEL ── */
@@ -29,34 +32,34 @@ html,body{height:100%;background:#0D0D1A;color:#F0EEF8;font-family:'Courier New'
 /* ── HEADER ── */
 header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px 8px;
+  padding:14px 28px 12px;
   border-bottom:1px solid #3DD6F518;
   flex-shrink:0;
 }
-.brand-title{color:#E8B86D;font-size:clamp(.65rem,1.8vw,.9rem);letter-spacing:.22em;text-transform:uppercase;font-weight:700}
-.brand-sub{color:#7B5EA760;font-size:clamp(.55rem,1.2vw,.7rem);letter-spacing:.1em;margin-top:3px}
-.power-led{width:10px;height:10px;border-radius:50%;background:#3DD6F5;box-shadow:0 0 6px #3DD6F5,0 0 14px #3DD6F580;flex-shrink:0}
+.brand-title{color:#E8B86D;font-size:clamp(1rem,2.4vw,1.5rem);letter-spacing:.22em;text-transform:uppercase;font-weight:700;text-shadow:0 0 18px #E8B86D60}
+.brand-sub{color:#7B5EA780;font-size:clamp(.75rem,1.5vw,1rem);letter-spacing:.1em;margin-top:5px;font-family:'Share Tech Mono',monospace}
+.power-led{width:16px;height:16px;border-radius:50%;background:#3DD6F5;box-shadow:0 0 10px #3DD6F5,0 0 22px #3DD6F580;flex-shrink:0}
 
 /* ── CONTROLS ── */
 #controls{
   display:flex;align-items:flex-end;justify-content:center;
-  gap:clamp(14px,4vw,52px);
-  padding:clamp(10px,1.8vh,22px) 20px clamp(8px,1.5vh,18px);
+  gap:clamp(24px,5.5vw,80px);
+  padding:clamp(14px,2.4vh,32px) 20px clamp(12px,2vh,28px);
   border-bottom:1px solid #3DD6F510;
   flex-shrink:0;
 }
-.ctrl-group{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ctrl-group{display:flex;flex-direction:column;align-items:center;gap:10px}
 .ctrl-label{
-  color:#7B5EA7;font-size:clamp(.52rem,1.1vw,.67rem);
-  letter-spacing:.1em;text-transform:uppercase;text-align:center;
+  color:#7B5EA7;font-size:clamp(.9rem,1.7vw,1.2rem);
+  letter-spacing:.12em;text-transform:uppercase;text-align:center;
 }
 .ctrl-track{
   position:relative;
-  width:34px;height:clamp(80px,13vh,125px);
+  width:68px;height:clamp(160px,24vh,240px);
   background:#0F0F22;
-  border:1px solid #3DD6F528;border-radius:4px;
+  border:1px solid #3DD6F528;border-radius:6px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 0 1px 4px #0005;
+  box-shadow:inset 0 1px 8px #0005;
 }
 .ctrl-track::before{
   content:'';position:absolute;left:50%;top:8px;bottom:8px;
@@ -74,8 +77,8 @@ header{
   -webkit-appearance:slider-vertical;
   writing-mode:vertical-lr;
   direction:rtl;
-  width:28px;
-  height:calc(100% - 10px);
+  width:56px;
+  height:calc(100% - 16px);
   background:transparent;
   cursor:pointer;
   position:relative;z-index:1;
@@ -84,27 +87,29 @@ header{
 /* WebKit thumb */
 .ctrl-slider::-webkit-slider-thumb{
   -webkit-appearance:none;
-  width:24px;height:9px;
+  width:48px;height:16px;
   background:linear-gradient(to right,#2AC4E0,#3DD6F5,#2AC4E0);
-  border-radius:3px;
+  border-radius:4px;
   border:1px solid #3DD6F5CC;
-  box-shadow:0 0 7px #3DD6F5BB,0 0 14px #3DD6F540;
+  box-shadow:0 0 12px #3DD6F5BB,0 0 24px #3DD6F540;
   cursor:grab;
 }
 .ctrl-slider::-webkit-slider-thumb:active{cursor:grabbing}
-.ctrl-slider::-webkit-slider-runnable-track{width:3px;background:transparent}
+.ctrl-slider::-webkit-slider-runnable-track{width:4px;background:transparent}
 /* Firefox */
 .ctrl-slider::-moz-range-thumb{
-  width:24px;height:9px;
+  width:48px;height:16px;
   background:linear-gradient(to right,#2AC4E0,#3DD6F5,#2AC4E0);
-  border-radius:3px;border:1px solid #3DD6F5CC;
-  box-shadow:0 0 7px #3DD6F5BB;cursor:grab;
+  border-radius:4px;border:1px solid #3DD6F5CC;
+  box-shadow:0 0 12px #3DD6F5BB;cursor:grab;
 }
-.ctrl-slider::-moz-range-track{width:3px;background:transparent}
+.ctrl-slider::-moz-range-track{width:4px;background:transparent}
 
 .ctrl-value{
-  color:#3DD6F5;font-size:clamp(.58rem,1.1vw,.7rem);
-  letter-spacing:.04em;min-width:56px;text-align:center;
+  color:#3DD6F5;font-size:clamp(1rem,1.7vw,1.35rem);
+  font-family:'Share Tech Mono',monospace;
+  letter-spacing:.06em;min-width:80px;text-align:center;
+  text-shadow:0 0 10px #3DD6F560;
 }
 
 /* ── KEYBOARD WRAP ── */
@@ -166,20 +171,44 @@ header{
 
 /* Key labels */
 .key-lbl{
-  font-size:clamp(7px,1.1vw,10px);
+  font-size:clamp(10px,1.5vw,16px);
   opacity:.65;
   pointer-events:none;
-  letter-spacing:0;
+  letter-spacing:.02em;
+  font-family:'Share Tech Mono',monospace;
 }
 .key-w .key-lbl{color:#7B5EA7}
 .key-b .key-lbl{color:#3DD6F5}
 
 /* ── FOOTER HINT ── */
 #hint{
-  position:fixed;bottom:6px;left:0;right:0;
-  text-align:center;font-size:.6rem;color:#7B5EA740;
-  pointer-events:none;letter-spacing:.08em;
+  position:fixed;bottom:8px;left:0;right:0;
+  text-align:center;font-size:clamp(.75rem,1.2vw,.95rem);color:#7B5EA750;
+  pointer-events:none;letter-spacing:.1em;
+  font-family:'Share Tech Mono',monospace;
 }
+
+/* ── VISUALIZER ── */
+#viz-wrap{
+  position:relative;
+  flex-shrink:0;
+  padding:0 20px;
+  border-bottom:1px solid #3DD6F510;
+  background:#07071A;
+}
+#viz{
+  display:block;
+  width:100%;
+  height:clamp(116px,18vh,192px);
+}
+.viz-tag{
+  position:absolute;
+  top:8px;
+  font-size:clamp(.85rem,1.4vw,1.1rem);letter-spacing:.18em;
+  pointer-events:none;
+}
+.viz-tag-l{ left:26px;  color:#7B5EA7; }
+.viz-tag-r{ right:26px; color:#E8B86D90; }
 </style>
 </head>
 <body>
@@ -232,6 +261,12 @@ header{
     </div>
   </div>
 
+  <div id="viz-wrap">
+    <canvas id="viz"></canvas>
+    <span class="viz-tag viz-tag-l">OSC 1</span>
+    <span class="viz-tag viz-tag-r">OSC 2</span>
+  </div>
+
   <div id="keyboard-wrap">
     <div id="keyboard"></div>
   </div>
@@ -282,6 +317,8 @@ const P = {
 //  AUDIO GRAPH  (initialized on first gesture)
 // ─────────────────────────────────────────────────────────────────
 let ctx, busIn, dryGain, wetGain, reverb, compressor, masterGain, lfo, lfoGain;
+let analyser, vizBuf;
+let osc1AnalyserBus, osc2AnalyserBus, analyser1, analyser2, vizBuf1, vizBuf2;
 
 function buildIR(ctx) {
   const sr  = ctx.sampleRate;
@@ -315,7 +352,26 @@ function initAudio() {
 
   masterGain = ctx.createGain();
   masterGain.gain.value = 0.82;
-  masterGain.connect(compressor);
+
+  analyser = ctx.createAnalyser();
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.0;
+  vizBuf = new Uint8Array(analyser.fftSize);
+
+  masterGain.connect(analyser);
+  analyser.connect(compressor);
+
+  // Per-oscillator tap buses for detuning visualizer
+  osc1AnalyserBus = ctx.createGain(); osc1AnalyserBus.gain.value = 1;
+  osc2AnalyserBus = ctx.createGain(); osc2AnalyserBus.gain.value = 1;
+  analyser1 = ctx.createAnalyser(); analyser1.fftSize = 2048; analyser1.smoothingTimeConstant = 0;
+  analyser2 = ctx.createAnalyser(); analyser2.fftSize = 2048; analyser2.smoothingTimeConstant = 0;
+  vizBuf1 = new Uint8Array(2048);
+  vizBuf2 = new Uint8Array(2048);
+  const oscSilent = ctx.createGain(); oscSilent.gain.value = 0;
+  osc1AnalyserBus.connect(analyser1); analyser1.connect(oscSilent);
+  osc2AnalyserBus.connect(analyser2); analyser2.connect(oscSilent);
+  oscSilent.connect(ctx.destination);
 
   dryGain = ctx.createGain();
   dryGain.gain.value = 1 - P.reverb * 0.45;
@@ -412,6 +468,31 @@ class Voice {
     this.o1.start(t);
     this.o2.start(t);
 
+    // Per-oscillator viz chains: o → vizFlt → vizAmp → analyserBus
+    // Mirrors the audio filter + envelope so all sliders show in the oscilloscope
+    this._vizFlt1 = ctx.createBiquadFilter();
+    this._vizFlt1.type = 'lowpass'; this._vizFlt1.Q.value = 6.5;
+    this._vizFlt1.frequency.setValueAtTime(baseCut, t);
+    this._vizFlt1.frequency.linearRampToValueAtTime(baseCut + bloom, t + atk * 1.6);
+
+    this._vizFlt2 = ctx.createBiquadFilter();
+    this._vizFlt2.type = 'lowpass'; this._vizFlt2.Q.value = 6.5;
+    this._vizFlt2.frequency.setValueAtTime(baseCut, t);
+    this._vizFlt2.frequency.linearRampToValueAtTime(baseCut + bloom, t + atk * 1.6);
+
+    this._vizAmp1 = ctx.createGain();
+    this._vizAmp1.gain.setValueAtTime(0.001, t);
+    this._vizAmp1.gain.linearRampToValueAtTime(1.0, t + atk);
+    this._vizAmp1.gain.linearRampToValueAtTime(sus, t + atk + dec);
+
+    this._vizAmp2 = ctx.createGain();
+    this._vizAmp2.gain.setValueAtTime(0.001, t);
+    this._vizAmp2.gain.linearRampToValueAtTime(1.0, t + atk);
+    this._vizAmp2.gain.linearRampToValueAtTime(sus, t + atk + dec);
+
+    if (osc1AnalyserBus) { this.o1.connect(this._vizFlt1); this._vizFlt1.connect(this._vizAmp1); this._vizAmp1.connect(osc1AnalyserBus); }
+    if (osc2AnalyserBus) { this.o2.connect(this._vizFlt2); this._vizFlt2.connect(this._vizAmp2); this._vizAmp2.connect(osc2AnalyserBus); }
+
     this._rel     = rel;
     this._baseCut = baseCut;
   }
@@ -441,6 +522,20 @@ class Voice {
     this.flt.frequency.cancelScheduledValues(tR);
     this.flt.frequency.setValueAtTime(curFlt, tR);
     this.flt.frequency.linearRampToValueAtTime(this._baseCut, tR + relTime * 0.9);
+
+    // Mirror release on viz nodes
+    [this._vizAmp1, this._vizAmp2].forEach(n => {
+      if (!n) return;
+      const cur = n.gain.value;
+      n.gain.cancelScheduledValues(tR); n.gain.setValueAtTime(cur, tR);
+      n.gain.linearRampToValueAtTime(0.0001, tR + relTime);
+    });
+    [this._vizFlt1, this._vizFlt2].forEach(n => {
+      if (!n) return;
+      const cur = n.frequency.value;
+      n.frequency.cancelScheduledValues(tR); n.frequency.setValueAtTime(cur, tR);
+      n.frequency.linearRampToValueAtTime(this._baseCut, tR + relTime * 0.9);
+    });
   }
 
   destroy() {
@@ -451,7 +546,8 @@ class Voice {
         this._lfoHooked = false;
       }
       this.o1.stop(); this.o2.stop();
-      [this.o1, this.o2, this.mix, this.flt, this.amp].forEach(n => { try { n.disconnect(); } catch(e){} });
+      [this.o1, this.o2, this.mix, this.flt, this.amp,
+       this._vizFlt1, this._vizFlt2, this._vizAmp1, this._vizAmp2].forEach(n => { try { n.disconnect(); } catch(e){} });
     } catch(e) {}
   }
 }
@@ -635,8 +731,14 @@ bindSlider('s-bloom','v-bloom', toBloom,
     P.bloom = v;
     if (!ctx) return;
     voices.forEach(voice => {
-      voice.flt.frequency.cancelScheduledValues(ctx.currentTime);
-      voice.flt.frequency.setTargetAtTime(260 + v, ctx.currentTime, 0.08);
+      const t = ctx.currentTime;
+      voice.flt.frequency.cancelScheduledValues(t);
+      voice.flt.frequency.setTargetAtTime(260 + v, t, 0.08);
+      [voice._vizFlt1, voice._vizFlt2].forEach(n => {
+        if (!n) return;
+        n.frequency.cancelScheduledValues(t);
+        n.frequency.setTargetAtTime(260 + v, t, 0.08);
+      });
     });
   }
 );
@@ -679,6 +781,93 @@ overlay.addEventListener('touchend', startFromOverlay, {passive:false});
 requestAnimationFrame(() => {
   requestAnimationFrame(positionBlacks);
 });
+
+// ─────────────────────────────────────────────────────────────────
+//  OSCILLOSCOPE VISUALIZER
+// ─────────────────────────────────────────────────────────────────
+(function initViz() {
+  const canvas  = document.getElementById('viz');
+  const vCtx    = canvas.getContext('2d');
+  let   dpr     = 1;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    canvas.width  = canvas.offsetWidth  * dpr;
+    canvas.height = canvas.offsetHeight * dpr;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  function drawWave(buf, color, glowColor, glowAlpha, W, H) {
+    const step = W / (buf.length - 1);
+    // Glow pass
+    vCtx.save();
+    vCtx.shadowBlur  = 8 * dpr;
+    vCtx.shadowColor = glowColor;
+    vCtx.strokeStyle = glowColor.slice(0, 7) + Math.round(glowAlpha * 255).toString(16).padStart(2,'0');
+    vCtx.lineWidth   = 3 * dpr;
+    vCtx.lineJoin    = 'round';
+    vCtx.beginPath();
+    for (let i = 0; i < buf.length; i++) {
+      const x = i * step;
+      const y = ((buf[i] / 128.0) - 1) * (H * 0.30) + H * 0.5;
+      i === 0 ? vCtx.moveTo(x, y) : vCtx.lineTo(x, y);
+    }
+    vCtx.stroke();
+    // Core pass
+    vCtx.shadowBlur  = 4 * dpr;
+    vCtx.strokeStyle = color;
+    vCtx.lineWidth   = 1.5 * dpr;
+    vCtx.beginPath();
+    for (let i = 0; i < buf.length; i++) {
+      const x = i * step;
+      const y = ((buf[i] / 128.0) - 1) * (H * 0.30) + H * 0.5;
+      i === 0 ? vCtx.moveTo(x, y) : vCtx.lineTo(x, y);
+    }
+    vCtx.stroke();
+    vCtx.restore();
+  }
+
+  function draw() {
+    requestAnimationFrame(draw);
+    const W = canvas.width, H = canvas.height;
+    if (!W || !H) return;
+
+    // Background — slight persistence for phosphor feel
+    vCtx.fillStyle = 'rgba(7,7,26,0.84)';
+    vCtx.fillRect(0, 0, W, H);
+
+    // Grid
+    vCtx.strokeStyle = '#7B5EA71A';
+    vCtx.lineWidth = dpr;
+    for (let i = 1; i < 4; i++) {
+      const y = H * i / 4;
+      vCtx.beginPath(); vCtx.moveTo(0, y); vCtx.lineTo(W, y); vCtx.stroke();
+    }
+    for (let i = 1; i < 8; i++) {
+      const x = W * i / 8;
+      vCtx.beginPath(); vCtx.moveTo(x, 0); vCtx.lineTo(x, H); vCtx.stroke();
+    }
+
+    // Center reference line
+    vCtx.strokeStyle = '#ffffff12';
+    vCtx.lineWidth = dpr;
+    vCtx.beginPath(); vCtx.moveTo(0, H / 2); vCtx.lineTo(W, H / 2); vCtx.stroke();
+
+    if (!analyser1 || !analyser2) return;
+
+    analyser1.getByteTimeDomainData(vizBuf1);
+    analyser2.getByteTimeDomainData(vizBuf2);
+
+    // OSC 2 — amber, drawn first (underneath)
+    drawWave(vizBuf2, '#E8B86DEE', '#E8B86D', 0.35, W, H);
+    // OSC 1 — cyan, drawn on top
+    drawWave(vizBuf1, '#3DD6F5EE', '#3DD6F5', 0.35, W, H);
+  }
+
+  draw();
+}());
 </script>
 </body>
 </html>
